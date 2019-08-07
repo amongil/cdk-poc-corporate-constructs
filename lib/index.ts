@@ -1,2 +1,2 @@
-import s3 = require('./s3');
-import dynamoDb = require ('./dynamodb')
+export * from './s3';
+export * from './dynamodb';
