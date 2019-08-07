@@ -1,7 +1,7 @@
 {
   "name": "cdk-poc-corporate-constructs",
   "version": "0.1.0",
-  "main": "lib/index.js",
+  "main": "index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
