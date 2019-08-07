@@ -1,2 +1,2 @@
-export * from './s3';
-export * from './dynamodb';
+export * from './lib/s3';
+export * from './lib/dynamodb';
