@@ -47,13 +47,17 @@ class BucketEncryptionChecker implements cdk.IAspect {
 class BucketTagsChecker implements cdk.IAspect {
   public visit(node: cdk.IConstruct): void {
     if (node instanceof s3.CfnBucket) {
-      var tags: string[] = [];
-      for (let tagObject of node.tags.renderTags()) {
-        tags.push(tagObject['key'])
-      }
-      
-      if (!(tags.includes('Department'))) {
+      if(!node.tags.hasTags()) {
         node.node.addError('You must specify the \'Department\' tag for your DynamoDB CfnTable construct');
+      } else {
+        var tags: string[] = [];
+        for (let tagObject of node.tags.renderTags()) {
+          tags.push(tagObject['key'])
+        }
+  
+        if (!(tags.includes('Department'))) {
+          node.node.addError('You must specify the \'Department\' tag for your DynamoDB CfnTable construct');
+        }
       }
     }
   }
