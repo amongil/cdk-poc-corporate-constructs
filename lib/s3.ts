@@ -48,7 +48,7 @@ class BucketTagsChecker implements cdk.IAspect {
   public visit(node: cdk.IConstruct): void {
     if (node instanceof s3.CfnBucket) {
       if(!node.tags.hasTags()) {
-        node.node.addError('You must specify the \'Department\' tag for your DynamoDB CfnTable construct');
+        node.node.addError('You must specify the \'Department\' tag for your S3 CfnBucket construct');
       } else {
         var tags: string[] = [];
         for (let tagObject of node.tags.renderTags()) {
@@ -56,7 +56,7 @@ class BucketTagsChecker implements cdk.IAspect {
         }
   
         if (!(tags.includes('Department'))) {
-          node.node.addError('You must specify the \'Department\' tag for your DynamoDB CfnTable construct');
+          node.node.addError('You must specify the \'Department\' tag for your S3 CfnBucket construct');
         }
       }
     }
