@@ -4,6 +4,7 @@ import rds = require('@aws-cdk/aws-rds');
 
 export interface ProductionPostgresqlProps {
     dbInstanceClass: any;
+    readonly multiAz: boolean;
     readonly [others: string]: any; // need to allow for other non-mandatory fields without directly specifying them all
 }
 
