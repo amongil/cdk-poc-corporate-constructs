@@ -3,9 +3,8 @@ import rds = require('@aws-cdk/aws-rds');
 
 
 export interface ProductionPostgresqlProps {
-    readonly multiAz: true; // mandatory fields
-    readonly dbInstanceClass: any;
-    readonly [others: string]: any; // need to allow for other non-mandatory fields without directly specifying them all
+    dbInstanceClass: any;
+    //readonly [others: string]: any; // need to allow for other non-mandatory fields without directly specifying them all
 }
 
 export class ProductionPostgresql extends cdk.Construct {
@@ -15,5 +14,14 @@ export class ProductionPostgresql extends cdk.Construct {
     super(scope, id);
 
     this.productionPostgresql = new rds.CfnDBInstance(this, 'productionPostgresql', props);
+    this.node.applyAspect(new RdsMultiAzEnabled())
   }
 }
+
+class RdsMultiAzEnabled implements cdk.IAspect {
+    public visit(node: cdk.IConstruct): void {
+      if (node instanceof rds.CfnDBInstance) {
+        node.multiAz = true
+      }
+    }
+  }
