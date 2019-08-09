@@ -3,7 +3,7 @@ import dynamoDb = require('@aws-cdk/aws-dynamodb');
 
 
 export interface DynamoTableProps {
-    readonly keySchema: any, // mandatory fields
+    readonly keySchema: any; // mandatory fields
     readonly [others: string]: any; // need to allow for other non-mandatory fields without directly specifying them all
 }
 
