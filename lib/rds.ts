@@ -15,6 +15,7 @@ export class ProductionPostgresql extends cdk.Construct {
 
     this.productionPostgresql = new rds.CfnDBInstance(this, 'productionPostgresql', props);
     this.node.applyAspect(new RdsMultiAzEnabled())
+    this.node.applyAspect(new RdsPostgresqlEngine())
   }
 }
 
@@ -24,4 +25,13 @@ class RdsMultiAzEnabled implements cdk.IAspect {
         node.multiAz = true
       }
     }
-  }
+}
+
+class RdsPostgresqlEngine implements cdk.IAspect {
+    public visit(node: cdk.IConstruct): void {
+      if (node instanceof rds.CfnDBInstance) {
+        node.engine = 'postgres';
+        node.engineVersion = '11.4'
+      }
+    }
+}
