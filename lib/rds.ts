@@ -16,6 +16,7 @@ export class ProductionPostgresql extends cdk.Construct {
     this.productionPostgresql = new rds.CfnDBInstance(this, 'productionPostgresql', props);
     this.node.applyAspect(new RdsMultiAzEnabled())
     this.node.applyAspect(new RdsPostgresqlEngine())
+    this.node.applyAspect(new RdsEncryptionChecker())
     this.node.applyAspect(new RdsTagsChecker())
   }
 }
@@ -35,6 +36,16 @@ class RdsPostgresqlEngine implements cdk.IAspect {
         node.engineVersion = '11.4'
       }
     }
+}
+
+class RdsEncryptionChecker implements cdk.IAspect {
+  public visit(node: cdk.IConstruct): void {
+    if (node instanceof rds.CfnDBInstance) {
+      if (!node.storageEncrypted) {
+        node.node.addError('Database storage encryption must be enabled');
+      }
+    }
+  }
 }
 
 class RdsTagsChecker implements cdk.IAspect {
