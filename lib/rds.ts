@@ -16,6 +16,7 @@ export class ProductionPostgresql extends cdk.Construct {
     this.productionPostgresql = new rds.CfnDBInstance(this, 'productionPostgresql', props);
     this.node.applyAspect(new RdsMultiAzEnabled())
     this.node.applyAspect(new RdsPostgresqlEngine())
+    this.node.applyAspect(new RdsTagsChecker())
   }
 }
 
@@ -34,4 +35,19 @@ class RdsPostgresqlEngine implements cdk.IAspect {
         node.engineVersion = '11.4'
       }
     }
+}
+
+class RdsTagsChecker implements cdk.IAspect {
+  public visit(node: cdk.IConstruct): void {
+    if (node instanceof rds.CfnDBInstance) {
+      var tags: string[] = [];
+      for (let tagObject of node.tags.renderTags()) {
+        tags.push(tagObject['key'])
+      }
+    
+      if (!(tags.includes('Department'))) {
+          node.node.addError('You must specify the \'Department\' tag for your DynamoDB CfnTable construct');
+      }
+    }
+  }
 }
